@@ -1,5 +1,5 @@
 {
-  "_readme": "두 계보(신규반·통합반)가 함께 읽는 공용 채널. 공지와 외부 링크만 둔다. 판 번호·설치파일 주소는 절대 넣지 말 것 — 계보별 파일(new.json·classic.json)이 따로 있다.",
+  "_readme": "두 판(캡컷 포함 버전·브루만 있는 버전)이 함께 읽는 공용 채널. 공지와 외부 링크만 둔다. 판 번호·설치파일 주소는 절대 넣지 말 것 — 판별 파일(with-capcut.json·vrew-only.json)이 따로 있다.",
   "_필드": "notices = 앱 시작 2.5초 뒤 뜨는 공지 배열(id 로 읽음 여부를 기억한다) / imggen_url = '이미지 생성' 카드가 여는 주소. 링크가 바뀌면 이 한 줄만 고치면 되고 앱 재빌드가 필요 없다.",
   "notices": [],
   "imggen_url": "https://labs.google/fx/tools/flow/shared/tool/2c531ccf-6a78-47e2-bcbb-e0762cae7077"
