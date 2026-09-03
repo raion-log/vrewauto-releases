@@ -12,10 +12,13 @@ VrewAuto 자동배치의 **설치파일과 업데이트 채널**을 두는 공�
 
 ```
 update/
-  new.json        신규반(캡컷 포함) 업데이트 채널
-  classic.json    통합반(브루 전용) 업데이트 채널
+  new.json        신규반(캡컷 포함) 업데이트 채널 — version·notes·force·windows_url·mac_url
+  classic.json    통합반(브루 전용) 업데이트 채널 — 같은 구조
+  common.json     두 계보 공용 — 공지(notices)와 이미지 생성 주소(imggen_url)
 releases/         GitHub Releases — 태그별 설치파일
 ```
+
+공용 파일에 판 번호나 설치파일 주소를 넣지 않는다. 계보를 가르는 값은 계보별 파일에만 둔다.
 
 **★두 채널은 절대 섞지 않는다.** 한 채널을 두 계보가 읽으면 반대편 설치파일을 받게 되고,
 두 계보의 설치 식별자가 같아 서로를 덮어쓴다. 2026-08-05와 2026-08-12에 같은 사고가 두 번 났다.
