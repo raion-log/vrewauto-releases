@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VrewAuto 설치 가이드</title>
+  <link rel="icon" type="image/png" href="../img/favicon.png">
+  <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --accent: #d48bff;
+      --accent2: #b85cff;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --line: rgba(184,92,255,0.18);
+      --warn-bg: rgba(251,191,36,0.10);
+      --warn-line: rgba(251,191,36,0.35);
+      --warn: #fbbf24;
+      --ok: #4ade80;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      padding: 24px 16px 64px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+
+    /* 헤더 */
+    .header { text-align: center; padding: 24px 0 28px; }
+    .logo { font-size: 40px; font-weight: 900; color: var(--accent); letter-spacing: -1px; }
+    .logo .sub { font-size: 18px; color: var(--accent2); margin-left: 6px; }
+    .head-title { font-size: 26px; font-weight: 800; margin-top: 14px; }
+    .head-desc { font-size: 15px; color: var(--muted); margin-top: 8px; }
+    .ver-badge {
+      display: inline-block; margin-top: 14px;
+      background: rgba(184,92,255,0.12); border: 1px solid var(--line);
+      color: var(--accent); font-size: 13px; font-weight: 700;
+      padding: 5px 14px; border-radius: 999px;
+    }
+
+    /* OS 탭 */
+    .tabs { display: flex; gap: 10px; margin: 8px 0 28px; }
+    .tab {
+      flex: 1; text-align: center; cursor: pointer;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 14px; padding: 16px; font-size: 17px; font-weight: 700;
+      color: var(--muted); transition: all 0.15s; user-select: none;
+    }
+    .tab .tab-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+    .tab.active {
+      color: #fff; border-color: var(--accent2);
+      background: linear-gradient(135deg, rgba(184,92,255,0.22), rgba(124,58,237,0.18));
+      box-shadow: 0 0 22px rgba(184,92,255,0.25);
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; animation: fade 0.25s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* 섹션 소제목 */
+    .section-head {
+      font-size: 18px; font-weight: 800; color: var(--accent);
+      margin: 26px 0 14px; padding-left: 4px;
+    }
+
+    /* 단계 카드 */
+    .step {
+      position: relative;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 22px 24px 22px 70px; margin-bottom: 16px;
+    }
+    .step-num {
+      position: absolute; left: 18px; top: 20px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2), #7c3aed);
+      color: #fff; font-weight: 800; font-size: 17px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 14px rgba(184,92,255,0.5);
+    }
+    .step-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .step-body { font-size: 15px; color: #cbd5e1; }
+    .step-body b { color: var(--accent); }
+    .point { color: var(--ok); font-weight: 800; }
+
+    /* 스크린샷 */
+    .shot {
+      display: block; width: 100%; margin-top: 14px;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      background: #fff;
+    }
+    .shot-cap { font-size: 12px; color: var(--muted); margin-top: 6px; text-align: center; }
+
+    /* ── 브라우저 UI 목업 (스크린샷 대체 — 실제 파일명이 항상 최신으로 표시됨) ── */
+    .mock {
+      margin-top: 14px; background: #fff; color: #202124;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      overflow: hidden; font-size: 14px;
+    }
+    /* 구글드라이브 경고 */
+    .mock-drive { padding: 18px 20px; line-height: 1.6; }
+    .mock-drive .m-title { color: #202124; margin-bottom: 4px; }
+    .mock-drive .m-sub { color: #5f6368; font-size: 13px; margin-bottom: 12px; }
+    .mock-drive .m-file { color: #1a73e8; font-size: 13px; text-decoration: none; }
+    .mock-drive .m-btn {
+      display: inline-block; margin-top: 14px;
+      border: 1px solid #dadce0; border-radius: 4px;
+      padding: 8px 16px; font-size: 13px; color: #3c4043; background: #fff;
+    }
+    /* 크롬 다운로드 바 */
+    .mock-bar-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; font-size: 15px; color: #3c4043; position: relative;
+    }
+    .mock-bar-icons { display: flex; gap: 16px; color: #5f6368; font-size: 15px; }
+    .mock-warn-row {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 4px 16px 16px; font-size: 12.5px; color: #3c4043; line-height: 1.5;
+    }
+    .mock-warn-row .m-ico { color: #f29900; font-size: 17px; line-height: 1.4; }
+    .mock-warn-row b { font-weight: 700; }
+    /* 크롬 ⋯ 드롭다운 메뉴 */
+    .mock-menu {
+      position: absolute; top: 42px; right: 10px; z-index: 2;
+      background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      width: 220px; padding: 6px 0; text-align: left;
+    }
+    .mock-menu .m-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; font-size: 13.5px; color: #3c4043;
+    }
+    .mock-menu .m-item .m-ico { font-size: 15px; width: 18px; text-align: center; color: #5f6368; }
+    .mock-menu .m-sep { height: 1px; background: #e8eaed; margin: 4px 0; }
+    /* 다운로드 페이지 카드 */
+    .mock-page { padding: 18px 18px 16px; }
+    .mock-page .m-date { font-size: 13px; color: #5f6368; margin-bottom: 12px; }
+    .mock-page .m-card {
+      border: 1px solid #dadce0; border-radius: 8px; padding: 14px 16px;
+    }
+    .mock-page .m-card-top { display: flex; gap: 10px; align-items: flex-start; }
+    .mock-page .m-card-top .m-ico { color: #f29900; font-size: 17px; }
+    .mock-page .m-card-top .m-x { margin-left: auto; color: #5f6368; font-size: 16px; }
+    .mock-page .m-card-body { font-size: 12.5px; color: #3c4043; line-height: 1.5; margin-top: 2px; }
+    .mock-page .m-card-btns { display: flex; gap: 10px; margin-top: 14px; }
+    .mock-page .m-card-btns span {
+      border: 1px solid #dadce0; border-radius: 4px; padding: 7px 14px;
+      font-size: 13px; color: #3c4043; display: inline-flex; align-items: center; gap: 6px;
+    }
+
+    /* 다운로드 버튼 */
+    .dl-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 12px;
+      background: linear-gradient(135deg, var(--accent2), #7c3aed);
+      color: #fff; font-size: 16px; font-weight: 800;
+      padding: 14px 30px; border-radius: 12px; text-decoration: none;
+      box-shadow: 0 6px 20px rgba(124,58,237,0.45); transition: all 0.15s;
+    }
+    .dl-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(124,58,237,0.6); }
+    .dl-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+    /* 다운로드 버튼 빨간 강조 (초보가 못 놓치게) */
+    .dl-highlight {
+      margin-top: 16px; padding: 18px 16px;
+      border: 3px dashed #ef4444; border-radius: 16px;
+      background: rgba(239,68,68,0.07); text-align: center;
+    }
+    .dl-arrow-label {
+      color: #ff5a5a; font-size: 17px; font-weight: 900; margin-bottom: 12px;
+      animation: arrow-bounce 0.9s ease-in-out infinite; text-shadow: 0 0 14px rgba(239,68,68,0.5);
+    }
+    @keyframes arrow-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+    .dl-btn.big { font-size: 19px; padding: 18px 36px; animation: red-pulse 1.3s ease-in-out infinite; }
+    @keyframes red-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.55), 0 6px 20px rgba(124,58,237,0.5); }
+      50% { box-shadow: 0 0 0 14px rgba(239,68,68,0), 0 6px 20px rgba(124,58,237,0.5); }
+    }
+    /* OS 고르기 안내 */
+    .tabs-guide { text-align: center; font-size: 16px; font-weight: 800; color: var(--accent); margin: 6px 0 12px; }
+
+    /* 경고/안심 박스 */
+    .callout {
+      background: var(--warn-bg); border: 1px solid var(--warn-line);
+      border-radius: 12px; padding: 14px 16px; margin-top: 14px; font-size: 14px;
+    }
+    .callout .c-head { font-weight: 800; color: var(--warn); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .callout .c-body { color: #e5e7eb; }
+    .callout.safe { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.3); }
+    .callout.safe .c-head { color: var(--ok); }
+
+    /* 주의사항 박스 */
+    .notice-box {
+      background: rgba(248,113,113,0.07); border: 1px solid rgba(248,113,113,0.3);
+      border-radius: 14px; padding: 20px 24px; margin-top: 28px;
+    }
+    .notice-box h3 { color: #f87171; font-size: 17px; margin-bottom: 10px; }
+    .notice-box ul { list-style: none; }
+    .notice-box li { font-size: 15px; color: #e5e7eb; padding: 5px 0 5px 22px; position: relative; }
+    .notice-box li::before { content: '✓'; position: absolute; left: 0; color: #f87171; font-weight: 800; }
+
+    /* FAQ */
+    .faq-title { font-size: 20px; font-weight: 800; margin: 40px 0 16px; text-align: center; color: var(--accent); }
+    .faq {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 12px; padding: 16px 20px; margin-bottom: 12px;
+    }
+    .faq .q { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .faq .q::before { content: 'Q. '; color: var(--accent); font-weight: 800; }
+    .faq .a { font-size: 14px; color: #cbd5e1; }
+    .faq .a::before { content: 'A. '; color: var(--ok); font-weight: 800; }
+
+    .footer { text-align: center; margin-top: 44px; font-size: 13px; color: #475569; }
+    .footer .heart { color: var(--accent2); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- 헤더 -->
+    <div class="header">
+      <div class="logo">VrewAuto<span class="sub">설치 가이드</span></div>
+      <div class="head-title">사진 보고 그대로 따라하세요 👇</div>
+      <div class="head-desc">다운로드할 때 경고창이 떠도 정상입니다. 안전한 프로그램이에요.</div>
+      <div class="ver-badge" id="ver-badge">최신 버전 v2.1.2</div>
+    </div>
+
+    <!-- 사용법 가이드 연결 (상단 고정) -->
+    <div style="text-align:center; background:linear-gradient(135deg, rgba(184,92,255,0.14), rgba(124,58,237,0.12)); border:1px solid var(--line); border-radius:16px; padding:20px 18px; margin-bottom:24px;">
+      <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:4px;">🎬 자동배치 사용법이 궁금하세요?</div>
+      <div style="font-size:13px; color:var(--muted); margin-bottom:14px;">설치 방법은 아래, 사용법은 여기에서 사진과 함께 확인하세요</div>
+      <a href="../sayong/" style="display:inline-block; background:linear-gradient(135deg, var(--accent2), #7c3aed); color:#fff; font-size:16px; font-weight:800; padding:13px 30px; border-radius:12px; text-decoration:none; box-shadow:0 6px 20px rgba(124,58,237,0.45);">📖 사용법 가이드 보러가기 →</a>
+    </div>
+
+    <!-- OS 선택 탭 -->
+    <div class="tabs-guide">👇 먼저 내 컴퓨터를 골라주세요</div>
+    <div class="tabs">
+      <div class="tab active" data-os="win">
+        <span class="tab-icon">🪟</span>윈도우 (Windows)
+      </div>
+      <div class="tab" data-os="mac">
+        <span class="tab-icon">🍎</span>맥 (Mac)
+      </div>
+    </div>
+
+    <!-- ───────── 윈도우 ───────── -->
+    <div class="panel active" id="panel-win">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">다운로드 시작</div>
+        <div class="step-body">아래 <b style="color:#ff5a5a;">빨간 박스 안의 버튼</b>을 누르면 설치 파일이 다운로드됩니다.</div>
+        <div class="dl-highlight">
+          <div class="dl-arrow-label">👇 여기를 눌러 설치파일을 받으세요! 👇</div>
+          <a class="dl-btn big" id="dl-win" href="https://drive.usercontent.google.com/download?id=1Y9tyT50aptJVG_URbRwYZNZ3VpncX44i&export=download&confirm=t">⬇ 윈도우용 설치파일 다운로드 (.exe)</a>
+        </div>
+        <div class="dl-note" id="dl-note-win">파일 이름: VrewAuto_v2.1.2_setup.exe</div>
+      </div>
+
+      <div class="section-head">⬇ 다운로드 경고, 이렇게 넘기세요 (4단계)</div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">구글 드라이브 경고 → <span class="point">"무시하고 다운로드"</span></div>
+        <div class="step-body">"바이러스가 있는지 검사할 수 없습니다" 라고 나오면, 파일이 커서 그런 것이니 <b>"무시하고 다운로드"</b>를 누르세요.</div>
+        <div class="mock mock-drive">
+          <div class="m-title">Google Drive에서 파일에 바이러스가 있는지 검사할 수 없습니다</div>
+          <div class="m-sub">실행 파일이므로 컴퓨터를 손상시킬 수 있습니다.</div>
+          <span class="m-file">VrewAuto_v2.1.2_setup.exe(190M)</span>
+          <div><span class="m-btn">무시하고 다운로드</span></div>
+        </div>
+        <div class="shot-cap">▲ "무시하고 다운로드" 클릭</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">크롬 경고 패널 → <span class="point">오른쪽 ⋯ (점 세 개)</span></div>
+        <div class="step-body">"일반적으로 다운로드되지 않습니다" 라고 나오면, 그 줄 오른쪽 끝의 <b>⋯ (점 세 개)</b>를 누르세요.</div>
+        <div class="mock">
+          <div class="mock-bar-head">다운로드
+            <div class="mock-bar-icons"><span>📁</span><span>🔍</span><span>⋯</span></div>
+          </div>
+          <div class="mock-warn-row">
+            <span class="m-ico">⚠</span>
+            <span><b>VrewAuto_v2.1.2_setup.exe</b>은(는) 일반적으로 다운로드되지 않습니다. 열기 전에 <b>VrewAuto_v2.1.2_setup.exe</b>을(를) 신뢰하는지 확인합니다.</span>
+          </div>
+        </div>
+        <div class="shot-cap">▲ 오른쪽 ⋯ 클릭</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">메뉴에서 → <span class="point">"다운로드 페이지 열기"</span></div>
+        <div class="step-body">작은 메뉴가 열리면 맨 위 <b>"다운로드 페이지 열기"</b>를 누르세요.</div>
+        <div class="mock">
+          <div class="mock-bar-head">다운로드
+            <div class="mock-bar-icons"><span>📁</span><span>🔍</span><span>⋯</span></div>
+            <div class="mock-menu">
+              <div class="m-item"><span class="m-ico">↗</span>다운로드 페이지 열기</div>
+              <div class="m-sep"></div>
+              <div class="m-item"><span class="m-ico">🗑</span>모든 다운로드 기록 제거</div>
+              <div class="m-item"><span class="m-ico">⚙</span>다운로드 설정</div>
+              <div class="m-sep"></div>
+              <div class="m-item">도구 모음에 표시</div>
+            </div>
+          </div>
+          <div class="mock-warn-row" style="opacity:.5;">
+            <span class="m-ico">⚠</span>
+            <span><b>VrewAuto_v2.1.2_setup.exe</b>은(는) 일반적으로 다운로드되지 않습니다.</span>
+          </div>
+        </div>
+        <div class="shot-cap">▲ "다운로드 페이지 열기" 클릭</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-title">다운로드 페이지 → <span class="point">"유지"</span> 클릭</div>
+        <div class="step-body"><b>"유지"</b> 버튼을 누르면 파일이 컴퓨터에 저장됩니다. (절대 "삭제" 누르지 마세요!)</div>
+        <div class="mock mock-page">
+          <div class="m-date">2026년 8월 4일</div>
+          <div class="m-card">
+            <div class="m-card-top">
+              <span class="m-ico">⚠</span>
+              <span class="m-card-body">VrewAuto_v2.1.2_setup.exe은(는) 일반적으로 다운로드되지 않습니다. 열기 전에 VrewAuto_v2.1.2_setup.exe을(를) 신뢰하는지 확인합니다.</span>
+              <span class="m-x">×</span>
+            </div>
+            <div class="m-card-btns">
+              <span>유지</span>
+              <span>🗑 삭제</span>
+            </div>
+          </div>
+        </div>
+        <div class="shot-cap">▲ "유지" 클릭 → 다운로드 완료!</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-title">설치 파일 실행 → 완료 🎉</div>
+        <div class="step-body">받은 파일을 <b>더블클릭</b>하고, 설치 창에서 <b>"다음"</b> → <b>"완료"</b>를 누르면 끝입니다.</div>
+        <div class="callout">
+          <div class="c-head">📌 파일 이름의 버전 숫자는 다를 수 있어요</div>
+          <div class="c-body">사진 속 파일명은 예시입니다. 실제로는 <b>VrewAuto_v2.1.2_setup.exe</b> 처럼 나옵니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────── 맥 ───────── -->
+    <div class="panel" id="panel-mac">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">설치 파일 다운로드</div>
+        <div class="step-body">아래 <b style="color:#ff5a5a;">빨간 박스 안의 버튼</b>을 누르면 맥용 설치 파일(.dmg)이 다운로드됩니다.</div>
+        <div class="dl-highlight">
+          <div class="dl-arrow-label">👇 여기를 눌러 설치파일을 받으세요! 👇</div>
+          <a class="dl-btn big" id="dl-mac" href="https://drive.usercontent.google.com/download?id=1HcIcqCH1ujWQ6scb-CIYv24ZcvrQ0lWf&export=download&confirm=t">⬇ 맥용 설치파일 다운로드 (.dmg)</a>
+        </div>
+        <div class="dl-note" id="dl-note-mac">파일 이름: VrewAuto_2.1.2_universal.dmg</div>
+        <div class="callout">
+          <div class="c-head">💡 다운로드 경고가 뜨면?</div>
+          <div class="c-body">맥에서 크롬으로 받을 때 "무시하고 다운로드" 같은 경고가 나오면, 위 <b>윈도우 탭의 2~5단계 사진</b>과 똑같이 따라 하시면 됩니다.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">응용 프로그램 폴더로 옮기기</div>
+        <div class="step-body">받은 <b>.dmg</b> 파일을 더블클릭해 창이 열리면, <b>VrewAuto 아이콘</b>을 옆의 <b>"Applications(응용 프로그램)"</b> 폴더로 끌어다 놓으세요.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">"확인되지 않은 개발자" 경고 대처</div>
+        <div class="step-body">처음 실행할 때 "열 수 없습니다" 라고 나오면, 새 프로그램이라 그런 것이니 걱정 마세요.</div>
+        <div class="callout safe">
+          <div class="c-head">✅ 이렇게 하세요</div>
+          <div class="c-body">① 응용 프로그램 폴더의 <b>VrewAuto 아이콘 우클릭</b> (트랙패드는 두 손가락 클릭) → ② <b>"열기"</b> → ③ 다시 <b>"열기"</b>. 한 번만 이렇게 하면 다음부턴 그냥 켜집니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 주의사항 -->
+    <div class="notice-box">
+      <h3>⚠️ 꼭 확인하세요</h3>
+      <ul>
+        <li>기존 버전을 <b>지우지 않아도 됩니다</b> — 자동으로 최신 버전으로 덮어쓰기 됩니다</li>
+        <li>설치 후 앱을 <b>껐다 켜야</b> 정상 작동합니다</li>
+        <li>맥(Mac) 사용자는 위 "맥" 탭의 .dmg 파일로 설치해 주세요</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-title">❓ 자주 묻는 질문</div>
+
+    <div class="faq">
+      <div class="q">"무시하고 다운로드"를 눌렀는데 또 경고가 떠요.</div>
+      <div class="a">정상입니다. 위 3~5단계(⋯ → 다운로드 페이지 열기 → 유지)를 그대로 따라 하시면 파일이 저장됩니다.</div>
+    </div>
+
+    <div class="faq">
+      <div class="q">백신(V3, 알약 등)이 위험하다고 막아요.</div>
+      <div class="a">새로 배포한 프로그램이라 백신이 아직 모르는 것뿐입니다. "허용" 또는 "신뢰함"으로 풀어주세요. 바이러스가 아닙니다.</div>
+    </div>
+
+    <div class="faq">
+      <div class="q">설치 후 매칭(이미지 배치) 기능을 쓰려면 뭐가 필요한가요?</div>
+      <div class="a">프로그램 안 설정에서 Gemini API 키를 입력하면 됩니다. 발급 방법은 강의 자료를 참고해 주세요.</div>
+    </div>
+
+    <div class="footer">
+      Made with <span class="heart">♥</span> by BinLab Studio · VrewAuto v2.1.2
+    </div>
+
+  </div>
+
+  <script>
+    // OS 탭 전환
+    const tabs = document.querySelectorAll('.tab');
+    const panels = { win: document.getElementById('panel-win'), mac: document.getElementById('panel-mac') };
+    function selectOS(os) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.os === os));
+      panels.win.classList.toggle('active', os === 'win');
+      panels.mac.classList.toggle('active', os === 'mac');
+    }
+    tabs.forEach(t => t.addEventListener('click', () => selectOS(t.dataset.os)));
+
+    // 접속한 기기 OS 자동 감지 → 해당 탭 먼저 보여주기
+    if (/Macintosh|Mac OS X/.test(navigator.userAgent)) selectOS('mac');
+
+    // 이 페이지는 어떤 Gist도 읽지 않는다 (2026-08-05).
+    // 다운로드 링크·버전은 위 HTML에 직접 적힌 값만 사용한다.
+    // 이유: 공유 Gist는 구버전 잔존 사용자를 v2.0.x로 보내는 전용 채널이 되었으므로,
+    //       이 페이지가 그것을 읽으면 잘못된 버전이 표시된다. 링크 교체는 HTML을 직접 수정할 것.
+  
+    /* 최신 판·다운로드 주소를 채널 파일에서 실시간으로 반영한다.
+       채널 한 줄만 고치면 이 페이지가 따라 바뀐다 — 페이지를 다시 배포할 필요가 없다.
+       ★값이 비어 있으면 덮어쓰지 않는다. 아직 올리지 않은 판을 가리키면 링크가 죽기 때문이다.
+       ★fetch 가 실패해도 아래 HTML 에 적힌 기본값으로 계속 동작한다(2026-08-12 채널 차단 전례). */
+    fetch('https://raw.githubusercontent.com/raion-log/vrewauto-releases/main/update/with-capcut.json?t=' + Date.now())
+      .then(res => res.json())
+      .then(data => {
+        var set = function (id, value) {
+          var el = document.getElementById(id);
+          if (el && value) el.textContent = value;
+        };
+        var link = function (id, url) {
+          var el = document.getElementById(id);
+          if (el && url && /^https?:\/\//.test(url)) el.href = url;
+        };
+        if (data.version) {
+          set('ver-badge', '최신 버전 v' + data.version);
+          set('dl-note-win', '파일 이름: VrewAuto_v' + data.version + '_setup.exe');
+          set('dl-note-mac', '파일 이름: VrewAuto_' + data.version + '_universal.dmg');
+        }
+        link('dl-win', data.windows_url);
+        link('dl-mac', data.mac_url);
+      })
+      .catch(function () {});
+  </script>
+</body>
+</html>

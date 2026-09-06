@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VrewAuto v2.0.5 새 기능 사용법</title>
+  <link rel="icon" type="image/png" href="../img/favicon.png">
+  <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --accent: #d48bff;
+      --accent2: #b85cff;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --line: rgba(184,92,255,0.18);
+      --warn-bg: rgba(251,191,36,0.10);
+      --warn-line: rgba(251,191,36,0.35);
+      --warn: #fbbf24;
+      --ok: #4ade80;
+      --mark: #ff5a5a;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      padding: 24px 16px 64px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+
+    /* 헤더 */
+    .header { text-align: center; padding: 24px 0 20px; }
+    .logo { font-size: 40px; font-weight: 900; color: var(--accent); letter-spacing: -1px; }
+    .logo .sub { font-size: 18px; color: var(--accent2); margin-left: 6px; }
+    .head-title { font-size: 24px; font-weight: 800; margin-top: 14px; line-height: 1.45; }
+    .head-desc { font-size: 15px; color: var(--muted); margin-top: 12px; }
+    .ver-badge {
+      display: inline-block; margin-top: 14px;
+      background: linear-gradient(135deg, rgba(74,222,128,0.16), rgba(184,92,255,0.14));
+      border: 1px solid var(--line);
+      color: #fff; font-size: 13px; font-weight: 800;
+      padding: 6px 16px; border-radius: 999px;
+    }
+    .ver-badge .new { color: var(--ok); }
+
+    /* 새 기능 요약 박스 */
+    .intro {
+      background: linear-gradient(135deg, rgba(184,92,255,0.14), rgba(124,58,237,0.10));
+      border: 1px solid var(--line); border-radius: 18px;
+      padding: 22px 22px; margin: 8px 0 20px;
+    }
+    .intro h2 { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .intro .lead { font-size: 14px; color: #cbd5e1; margin-bottom: 12px; }
+    .intro .lead b { color: var(--accent); }
+    .intro ul { list-style: none; }
+    .intro li { font-size: 15px; color: #e5e7eb; padding: 6px 0 6px 26px; position: relative; }
+    .intro li::before { content: '✨'; position: absolute; left: 0; }
+    .intro li b { color: var(--accent); }
+
+    /* 왜 만들었나 배경 박스 */
+    .why {
+      background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.28);
+      border-radius: 16px; padding: 20px 22px; margin: 0 0 28px;
+    }
+    .why h3 { font-size: 16px; font-weight: 800; color: #f87171; margin-bottom: 12px; }
+    .why p { font-size: 14.5px; color: #e5e7eb; margin-bottom: 9px; padding-left: 20px; position: relative; }
+    .why p::before { content: '•'; position: absolute; left: 4px; color: #f87171; font-weight: 800; }
+    .why p b { color: #fca5a5; }
+    .why .sol { color: #fff; font-weight: 600; margin-top: 12px; padding-left: 20px; }
+    .why .sol::before { content: '→'; color: var(--ok); }
+    .why .sol b { color: var(--accent); }
+
+    /* 섹션 소제목 */
+    .section-head {
+      font-size: 18px; font-weight: 800; color: var(--accent);
+      margin: 32px 0 12px; padding-left: 4px;
+    }
+    .method-note { font-size: 14px; color: var(--muted); margin-bottom: 14px; padding-left: 4px; }
+    .method-note b { color: var(--text); }
+
+    /* 방법 소제목 (브루/헤이젠) */
+    .sub-head {
+      font-size: 16px; font-weight: 800; color: #fff;
+      margin: 24px 0 12px; padding: 11px 16px;
+      background: linear-gradient(135deg, rgba(184,92,255,0.18), rgba(124,58,237,0.10));
+      border: 1px solid var(--line); border-radius: 12px;
+    }
+
+    /* 단계 카드 */
+    .step {
+      position: relative;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 22px 24px 22px 70px; margin-bottom: 16px;
+    }
+    .step-num {
+      position: absolute; left: 18px; top: 20px;
+      min-width: 36px; height: 36px; padding: 0 8px; border-radius: 18px;
+      background: linear-gradient(135deg, var(--accent2), #7c3aed);
+      color: #fff; font-weight: 800; font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 14px rgba(184,92,255,0.5); white-space: nowrap;
+    }
+    .step-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .step-body { font-size: 15px; color: #cbd5e1; }
+    .step-body b { color: var(--accent); }
+    .point { color: var(--ok); font-weight: 800; }
+
+    /* 스크린샷 + 마커 오버레이 */
+    .shot-wrap {
+      position: relative; display: block; width: 100%;
+      margin-top: 14px; cursor: zoom-in; line-height: 0;
+    }
+    .shot {
+      display: block; width: 100%;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      background: #fff;
+    }
+    .zoom-hint {
+      position: absolute; right: 8px; bottom: 8px;
+      background: rgba(15,15,26,0.82); color: #fff;
+      font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 8px;
+      line-height: 1.2; pointer-events: none;
+    }
+    .mk { position: absolute; transform: translate(-50%, -50%); pointer-events: none; z-index: 3; }
+    .mk-ring {
+      display: block; width: 46px; height: 46px;
+      border: 3px solid var(--mark); border-radius: 50%;
+      box-shadow: 0 0 14px rgba(239,68,68,0.75), inset 0 0 10px rgba(239,68,68,0.4);
+      animation: mkpulse 1.25s ease-in-out infinite;
+    }
+    .mk.box .mk-ring { width: 130px; height: 46px; border-radius: 12px; }
+    .mk.box.tall .mk-ring { width: 150px; height: 40px; }
+    @keyframes mkpulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.16); opacity: 0.55; } }
+    .mk-tip {
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--mark); color: #fff; font-size: 12px; font-weight: 800;
+      padding: 4px 10px; border-radius: 9px; white-space: nowrap; line-height: 1.2;
+      box-shadow: 0 4px 12px rgba(239,68,68,0.5);
+    }
+    .mk-tip::after {
+      content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border: 6px solid transparent; border-top-color: var(--mark);
+    }
+    .shot-cap { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
+
+    /* 라이트박스 (확대) */
+    .lb {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.93);
+      display: none; align-items: center; justify-content: center;
+      z-index: 100; cursor: zoom-out; padding: 16px;
+    }
+    .lb.on { display: flex; }
+    .lb img { max-width: 97%; max-height: 90%; border-radius: 8px; box-shadow: 0 10px 50px rgba(0,0,0,0.6); }
+    .lb-hint { position: absolute; top: 14px; left: 0; right: 0; text-align: center; color: #cbd5e1; font-size: 13px; font-weight: 600; }
+    .lb-close { position: absolute; top: 12px; right: 18px; color: #fff; font-size: 30px; font-weight: 300; line-height: 1; }
+
+    /* 경고/안심 박스 */
+    .callout {
+      background: var(--warn-bg); border: 1px solid var(--warn-line);
+      border-radius: 12px; padding: 14px 16px; margin-top: 14px; font-size: 14px;
+    }
+    .callout .c-head { font-weight: 800; color: var(--warn); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .callout .c-body { color: #e5e7eb; }
+    .callout.safe { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.3); }
+    .callout.safe .c-head { color: var(--ok); }
+
+    /* FAQ */
+    .faq-title { font-size: 20px; font-weight: 800; margin: 40px 0 16px; text-align: center; color: var(--accent); }
+    .faq {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 12px; padding: 16px 20px; margin-bottom: 12px;
+    }
+    .faq .q { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .faq .q::before { content: 'Q. '; color: var(--accent); font-weight: 800; }
+    .faq .a { font-size: 14px; color: #cbd5e1; }
+    .faq .a::before { content: 'A. '; color: var(--ok); font-weight: 800; }
+
+    .footer { text-align: center; margin-top: 44px; font-size: 13px; color: #475569; }
+    .footer .heart { color: var(--accent2); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- 헤더 -->
+    <div class="header">
+      <div class="logo">VrewAuto<span class="sub">새 기능 가이드</span></div>
+      <div class="head-title">슈퍼톤·일레븐랩스로 만든 음성만 넣으면<br><span style="color:var(--accent)">SRT 자막을 자동으로 생성</span>해줘요 🎙️</div>
+      <div class="head-desc">TTS(슈퍼톤·일레븐랩스 등)로 영상 만드시는 분들을 위한 기능이에요.<br>헤이젠 SRT가 없어도, 음성 파일(MP3/MP4)만 있으면 SRT를 만들어줍니다.</div>
+      <div class="ver-badge"><span class="new">NEW</span> · v2.0.5</div>
+    </div>
+
+    <!-- 새 기능 요약 -->
+    <div class="intro">
+      <h2>🆕 이번 버전에서 새로워진 점</h2>
+      <div class="lead">슈퍼톤·일레븐랩스 같은 <b>TTS로 음성을 만드는 분들</b>이, 그동안 헤이젠 SRT가 없어 불편했던 점을 해결했어요.</div>
+      <ul>
+        <li>슈퍼톤·일레븐랩스 등 <b>TTS 음성(MP3/MP4)을 넣으면 SRT 자막 파일을 자동 생성</b>합니다 (진행률·남은시간 표시)</li>
+        <li>생성한 <b>SRT의 저장 위치를 직접 선택</b>할 수 있어요 (기본값 = 다운로드 폴더)</li>
+        <li>음성에 <b>같은 내용이 반복</b>되면 매칭 전에 미리 알려드려요</li>
+      </ul>
+    </div>
+
+    <!-- 왜 만들었나 -->
+    <div class="why">
+      <h3>🤔 왜 이 기능을 만들었나요?</h3>
+      <p><b>헤이젠(HeyGen) SRT</b>는 실제 영상 음성과 시각이 미세하게 <b>어긋나는 경우</b>가 있어요 — 자막이 밀려서 이미지가 엉뚱한 곳에 배치됩니다.</p>
+      <p><b>브루(Vrew)</b>는 내가 쓴 대본 글자와 <b>브루가 받아쓴 글자가 달라지면</b> 이미지 매칭에서 오류가 날 수 있어요.</p>
+      <p class="sol">그래서 <b>실제 음성(MP3)에서 정확한 타임코드로 SRT를 새로 만들어</b> 이 두 문제를 한 번에 해결합니다.</p>
+    </div>
+
+    <!-- ───── STEP 0. 음성 MP3 준비 ───── -->
+    <div class="section-head">📥 STEP 0. 먼저 음성 파일(MP3)을 준비하세요</div>
+    <div class="method-note">본인 방식에 맞는 것만 따라 하세요 — <b>브루로 만들었으면 🅰️</b>, <b>헤이젠으로 만들었으면 🅱️</b>.</div>
+
+    <!-- A. 브루 -->
+    <div class="sub-head">🅰️ 브루(Vrew)에서 MP3 내보내기</div>
+
+    <div class="step">
+      <div class="step-num">A-1</div>
+      <div class="step-title">내보내기 → <span class="point">"오디오 파일(mp3, wav)"</span></div>
+      <div class="step-body">브루 오른쪽 위 <b>"내보내기"</b>를 누르고, 목록에서 <b>"오디오 파일(mp3, wav)"</b>을 고르세요.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/vrew-export.png" alt="브루 내보내기 메뉴 - 오디오 파일 mp3 wav">
+        <div class="mk box tall" style="left:84%; top:39%;"><span class="mk-ring"></span><span class="mk-tip">👆 오디오 파일(mp3, wav)</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ 내보내기 → "오디오 파일(mp3, wav)"</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">A-2</div>
+      <div class="step-title">MP3 선택 → <span class="point">"내보내기"</span></div>
+      <div class="step-body">대상은 <b>"모든 씬, 모든 클립"</b>, 형식은 <b>MP3</b>로 두고 <b>"내보내기"</b>를 누르면 음성 파일이 저장됩니다.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/vrew-audio.png" alt="브루 오디오 내보내기 창 - MP3 선택 내보내기">
+        <div class="mk box" style="left:45%; top:68.5%;"><span class="mk-ring"></span><span class="mk-tip">👆 여기 클릭</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ MP3 선택 후 "내보내기"</div>
+    </div>
+
+    <!-- B. 헤이젠 -->
+    <div class="sub-head">🅱️ 헤이젠(HeyGen)에서 MP3 내려받기</div>
+
+    <div class="step">
+      <div class="step-num">B-1</div>
+      <div class="step-title">영상 <span class="point">⋯ 메뉴 → "Download"</span></div>
+      <div class="step-body">헤이젠에서 영상에 마우스를 올려 <b>⋯ (점 세 개)</b> 또는 우클릭 메뉴를 열고 <b>"Download"</b>를 누르세요.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/heygen-menu.png" alt="헤이젠 영상 메뉴 - Download">
+        <div class="mk box" style="left:60%; top:37%;"><span class="mk-ring"></span><span class="mk-tip">👆 Download</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ 영상 메뉴 → "Download"</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">B-2</div>
+      <div class="step-title"><span class="point">"Audio"</span> 탭 → "Download"</div>
+      <div class="step-body">창이 뜨면 위쪽에서 <b>"Audio"</b> 탭을 고르고, 아래 <b>"Download"</b> 버튼을 누르면 음성(MP3)이 저장됩니다.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/heygen-audio.png" alt="헤이젠 다운로드 창 - Audio 탭 Download">
+        <div class="mk" style="left:79%; top:24%;"><span class="mk-ring"></span><span class="mk-tip">① Audio</span></div>
+        <div class="mk box" style="left:50%; top:80%;"><span class="mk-ring"></span><span class="mk-tip">② Download</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ ① "Audio" 탭 선택 → ② "Download"</div>
+    </div>
+
+    <!-- ───── STEP 1~6. SRT 만들고 배치 ───── -->
+    <div class="section-head">🎬 STEP 1~6. 음성으로 SRT 만들고 배치하기</div>
+
+    <!-- 1 -->
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">홈에서 <span class="point">"Vrew 자동배치"</span> 열기</div>
+      <div class="step-body">프로그램을 켜고 왼쪽 메뉴에서 <b>Vrew 자동배치</b>를 누르세요.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/home.png" alt="VrewAuto 홈 화면 - 왼쪽 Vrew 자동배치 메뉴">
+        <div class="mk box" style="left:6.5%; top:18%;"><span class="mk-ring"></span><span class="mk-tip">👈 여기 클릭</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ 왼쪽 메뉴 "Vrew 자동배치"</div>
+    </div>
+
+    <!-- 2 -->
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">시작 방식 → <span class="point">"MP3·MP4 시작"</span> 선택</div>
+      <div class="step-body"><b>"MP3·MP4 시작"</b>을 고르세요. 준비한 <b>음성 파일을 넣으면 SRT가 자동 생성</b>됩니다. (이미 SRT가 있으면 그대로 사용돼요)</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/start.png" alt="Vrew 자동배치 시작 방식 - MP3 MP4 시작 선택">
+        <div class="mk box" style="left:27%; top:19%;"><span class="mk-ring"></span><span class="mk-tip">👆 이걸 선택</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ "MP3·MP4 시작" 선택 · 매칭 옵션(자막 언어·이미지 배치·화면전환)은 취향대로</div>
+    </div>
+
+    <!-- 3 -->
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">재료 넣기 <span class="point">(원고 · 음성 · VREW · 이미지)</span></div>
+      <div class="step-body">4칸에 파일을 순서대로 넣어주세요. <b>① 원고</b>, <b>② 이미지 프롬프트</b>, <b>③ .vrew 프로젝트</b>, <b>④ 이미지 폴더</b>입니다. 방금 준비한 음성 파일(MP3/MP4)은 원고 칸에 넣으면 돼요. 파일을 창에 <b>드래그</b>해도 됩니다.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/materials.png" alt="Vrew 자동배치 재료 넣기 - 원고 프롬프트 VREW 이미지 4칸">
+        <div class="mk box" style="left:34%; top:28%;"><span class="mk-ring"></span><span class="mk-tip">👆 여기에 파일 넣기</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ ① 원고 · ② 프롬프트 · ③ VREW · ④ 이미지 폴더 (드래그해서 넣어도 됨)</div>
+    </div>
+
+    <!-- 4 -->
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-title">음성 → SRT 자동 생성 → <span class="point">"SRT 생성 시작"</span></div>
+      <div class="step-body">음성 파일을 넣으면 <b>"음성 → SRT 자동 생성"</b> 창이 뜹니다. 대본은 프롬프트에서 자동으로 채워지니 내용만 확인하고 <b>"SRT 생성 시작"</b>을 누르세요.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/srt-modal.png" alt="음성 SRT 자동 생성 창 - SRT 생성 시작 버튼">
+        <div class="mk" style="left:65%; top:73.5%;"><span class="mk-ring"></span><span class="mk-tip">👇 여기 클릭</span></div>
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ 대본 확인 후 오른쪽 아래 "SRT 생성 시작"</div>
+      <div class="callout safe">
+        <div class="c-head">✅ 빠름 vs 정밀, 뭘 고를까요?</div>
+        <div class="c-body"><b>빠름(권장)</b> — 첫 사용 시 약 466MB 한 번만 다운로드, 대부분 이걸로 충분합니다. <b>정밀</b> — 약 1.5GB, 느리지만 인식이 더 정확해요.</div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-title">진행률 보며 잠시 기다리기 <span class="point">(모델 → 추출 → 인식 → 정렬)</span></div>
+      <div class="step-body">음성을 인식해 SRT 시각을 맞추는 동안 <b>진행률과 남은 시간</b>이 표시됩니다. 4단계(모델·추출·인식·정렬)를 거쳐요.</div>
+      <div class="shot-wrap" onclick="openLB(this)">
+        <img class="shot" src="img/srt-progress.png" alt="음성 인식 중 진행률 30퍼센트 - 남은 시간 표시">
+        <div class="zoom-hint">🔍 클릭하면 크게</div>
+      </div>
+      <div class="shot-cap">▲ 음성 인식 중… 진행률·경과·남은시간이 표시됩니다</div>
+      <div class="callout">
+        <div class="c-head">💚 안심하세요</div>
+        <div class="c-body">중간에 멈춘 것처럼 보여도 <b>PC가 꺼지거나 데이터가 손실되지 않습니다.</b> 5분 분량이면 대략 몇 분 안에 끝나요.</div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-title">SRT 완성 → <span class="point">"매칭 실행"</span> → "Vrew 열기"</div>
+      <div class="step-body">SRT가 만들어지면 <b>다운로드 폴더</b>에 .srt로 저장되고(재사용 가능), 이어서 <b>"매칭 실행"</b>을 누르면 이미지가 씬에 자동 배치됩니다. 끝나면 <b>"Vrew 열기"</b>로 결과를 확인하세요.</div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-title">❓ 자주 묻는 질문</div>
+
+    <div class="faq">
+      <div class="q">헤이젠 SRT 파일이 원래 있어요. 꼭 음성으로 만들어야 하나요?</div>
+      <div class="a">헤이젠 SRT가 음성과 잘 맞으면 그대로 쓰셔도 됩니다. 다만 헤이젠 SRT는 실제 음성과 시각이 어긋날 때가 있어서, 음성(MP3)에서 직접 뽑으면 더 정확해요. SRT가 이미 있으면 자동 생성은 건너뜁니다.</div>
+    </div>
+
+    <div class="faq">
+      <div class="q">슈퍼톤·일레븐랩스로 만든 음성만 있고 SRT가 없어요.</div>
+      <div class="a">바로 이 기능을 위한 경우예요! "MP3·MP4 시작"에 음성만 넣으면 SRT를 자동으로 만들어줍니다.</div>
+    </div>
+
+    <div class="faq">
+      <div class="q">"빠름"은 466MB를 매번 받나요?</div>
+      <div class="a">아니요. 첫 사용 때 한 번만 받고, 그 다음부터는 다시 받지 않습니다. (이어받기도 지원해요)</div>
+    </div>
+
+    <div class="faq">
+      <div class="q">만든 SRT가 어디에 저장되나요?</div>
+      <div class="a">기본값은 <b>다운로드 폴더</b>입니다. 저장 위치를 직접 고를 수도 있어요. 한 번 만든 SRT는 음성 파일 옆에 남아 다음에 재사용됩니다.</div>
+    </div>
+
+    <div class="faq">
+      <div class="q">업데이트가 안 떠요.</div>
+      <div class="a">프로그램을 껐다 켜주세요. 그래도 안 뜨면 1~2분 뒤 다시 켜보세요. 설치 방법은 <a href="../" style="color:var(--accent)">설치 가이드</a>를 참고하세요.</div>
+    </div>
+
+    <div class="footer">
+      Made with <span class="heart">♥</span> by BinLab Studio · VrewAuto v2.0.5
+    </div>
+
+  </div>
+
+  <!-- 라이트박스 (이미지 확대) -->
+  <div class="lb" id="lb">
+    <div class="lb-hint">🔍 확대 보기 — 화면을 누르면 닫힙니다</div>
+    <span class="lb-close">×</span>
+    <img id="lb-img" src="" alt="확대 이미지">
+  </div>
+
+  <script>
+    function openLB(wrap) {
+      var img = wrap.querySelector('img.shot');
+      var lb = document.getElementById('lb');
+      document.getElementById('lb-img').src = img.src;
+      lb.classList.add('on');
+    }
+    document.getElementById('lb').addEventListener('click', function () {
+      this.classList.remove('on');
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') document.getElementById('lb').classList.remove('on');
+    });
+  </script>
+</body>
+</html>
