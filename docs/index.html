@@ -271,7 +271,7 @@
         <div class="mock mock-drive">
           <div class="m-title">Google Drive에서 파일에 바이러스가 있는지 검사할 수 없습니다</div>
           <div class="m-sub">실행 파일이므로 컴퓨터를 손상시킬 수 있습니다.</div>
-          <span class="m-file">VrewAuto_v2.1.2_setup.exe(190M)</span>
+          <span class="m-file"><span class="fname">VrewAuto_v2.1.2_setup.exe</span>(190M)</span>
           <div><span class="m-btn">무시하고 다운로드</span></div>
         </div>
         <div class="shot-cap">▲ "무시하고 다운로드" 클릭</div>
@@ -287,7 +287,7 @@
           </div>
           <div class="mock-warn-row">
             <span class="m-ico">⚠</span>
-            <span><b>VrewAuto_v2.1.2_setup.exe</b>은(는) 일반적으로 다운로드되지 않습니다. 열기 전에 <b>VrewAuto_v2.1.2_setup.exe</b>을(를) 신뢰하는지 확인합니다.</span>
+            <span><b class="fname">VrewAuto_v2.1.2_setup.exe</b>은(는) 일반적으로 다운로드되지 않습니다. 열기 전에 <b class="fname">VrewAuto_v2.1.2_setup.exe</b>을(를) 신뢰하는지 확인합니다.</span>
           </div>
         </div>
         <div class="shot-cap">▲ 오른쪽 ⋯ 클릭</div>
@@ -311,7 +311,7 @@
           </div>
           <div class="mock-warn-row" style="opacity:.5;">
             <span class="m-ico">⚠</span>
-            <span><b>VrewAuto_v2.1.2_setup.exe</b>은(는) 일반적으로 다운로드되지 않습니다.</span>
+            <span><b class="fname">VrewAuto_v2.1.2_setup.exe</b>은(는) 일반적으로 다운로드되지 않습니다.</span>
           </div>
         </div>
         <div class="shot-cap">▲ "다운로드 페이지 열기" 클릭</div>
@@ -326,7 +326,7 @@
           <div class="m-card">
             <div class="m-card-top">
               <span class="m-ico">⚠</span>
-              <span class="m-card-body">VrewAuto_v2.1.2_setup.exe은(는) 일반적으로 다운로드되지 않습니다. 열기 전에 VrewAuto_v2.1.2_setup.exe을(를) 신뢰하는지 확인합니다.</span>
+              <span class="m-card-body"><span class="fname">VrewAuto_v2.1.2_setup.exe</span>은(는) 일반적으로 다운로드되지 않습니다. 열기 전에 <span class="fname">VrewAuto_v2.1.2_setup.exe</span>을(를) 신뢰하는지 확인합니다.</span>
               <span class="m-x">×</span>
             </div>
             <div class="m-card-btns">
@@ -344,7 +344,7 @@
         <div class="step-body">받은 파일을 <b>더블클릭</b>하고, 설치 창에서 <b>"다음"</b> → <b>"완료"</b>를 누르면 끝입니다.</div>
         <div class="callout">
           <div class="c-head">📌 파일 이름의 버전 숫자는 다를 수 있어요</div>
-          <div class="c-body">사진 속 파일명은 예시입니다. 실제로는 <b>VrewAuto_v2.1.2_setup.exe</b> 처럼 나옵니다.</div>
+          <div class="c-body">사진 속 파일명은 예시입니다. 실제로는 <b class="fname">VrewAuto_v2.1.2_setup.exe</b> 처럼 나옵니다.</div>
         </div>
       </div>
     </div>
@@ -360,9 +360,13 @@
           <a class="dl-btn big" id="dl-mac" href="https://drive.usercontent.google.com/download?id=1HcIcqCH1ujWQ6scb-CIYv24ZcvrQ0lWf&export=download&confirm=t">⬇ 맥용 설치파일 다운로드 (.dmg)</a>
         </div>
         <div class="dl-note" id="dl-note-mac">파일 이름: VrewAuto_2.1.2_universal.dmg</div>
+        <div class="callout" id="mac-pending" style="display:none">
+          <div class="c-head">🛠 맥용 새 버전은 준비 중입니다</div>
+          <div class="c-body">위 버튼은 <b>이전 버전</b>입니다. 맥용 새 버전이 나오면 이 안내가 사라집니다.</div>
+        </div>
         <div class="callout">
           <div class="c-head">💡 다운로드 경고가 뜨면?</div>
-          <div class="c-body">맥에서 크롬으로 받을 때 "무시하고 다운로드" 같은 경고가 나오면, 위 <b>윈도우 탭의 2~5단계 사진</b>과 똑같이 따라 하시면 됩니다.</div>
+          <div class="c-body">맥에서 크롬으로 받을 때 "무시하고 다운로드" 같은 경고가 나오면, 위 <b>윈도우 탭의 다운로드 경고 단계 사진</b>과 똑같이 따라 하시면 됩니다.</div>
         </div>
       </div>
 
@@ -446,13 +450,34 @@
           var el = document.getElementById(id);
           if (el && url && /^https?:\/\//.test(url)) el.href = url;
         };
-        var fileOf = function (url) { return decodeURIComponent(url.split('/').pop().split('?')[0]); };
-        // 판 번호·파일 이름은 설치파일 주소가 채워졌을 때만 바꾼다 — 버튼이 받는 파일과 표시가 어긋나지 않게
-        if (data.version && data.windows_url) set('ver-badge', '최신 버전 v' + data.version);
-        if (data.windows_url) set('dl-note-win', '파일 이름: ' + fileOf(data.windows_url));
-        if (data.mac_url) set('dl-note-mac', '파일 이름: ' + fileOf(data.mac_url));
+        /* 주소 끝이 실제 설치파일일 때만 이름을 쓴다.
+           드라이브 주소(.../download?id=)나 페이지 주소(끝이 /)면 이름이 'download' 나 빈칸이 된다. */
+        var fileOf = function (url) {
+          var name = decodeURIComponent(String(url).split('?')[0].split('/').pop() || '');
+          return /\.(exe|dmg)$/i.test(name) ? name : '';
+        };
+        var ver = /^\d+\.\d+\.\d+$/.test(String(data.version || '')) ? data.version : '';
+        var winName = data.windows_url ? fileOf(data.windows_url) : '';
+        var macName = data.mac_url ? fileOf(data.mac_url) : '';
+
+        // 판 번호는 윈도우 설치파일이 실제로 올라간 뒤에만 바꾼다 — 버튼이 주는 파일과 어긋나지 않게.
+        // version 값이 잘못 적혔으면(예: "v2.1.3") 파일 이름에서 읽어 배지와 버튼이 어긋나지 않게 한다.
+        var nameVer = (winName.match(/(\d+\.\d+\.\d+)/) || [])[1] || '';
+        if (winName && (ver || nameVer)) set('ver-badge', '최신 버전 v' + (ver || nameVer));
+        if (winName) {
+          set('dl-note-win', '파일 이름: ' + winName);
+          // 화면 안 예시 파일명(경고창 목업)도 같이 바꾼다. 안 바꾸면 한 페이지가 두 이름을 말한다
+          Array.prototype.forEach.call(document.querySelectorAll('.fname'), function (el) {
+            el.textContent = winName;
+          });
+        }
+        if (macName) set('dl-note-mac', '파일 이름: ' + macName);
         link('dl-win', data.windows_url);
         link('dl-mac', data.mac_url);
+
+        // 윈도우만 새 판이면 맥 탭에 그 사실을 알린다 (맥 수강생이 새 판인 줄 알고 옛 파일을 받는다)
+        var macPending = document.getElementById('mac-pending');
+        if (macPending && ver && winName && !macName) macPending.style.display = '';
       })
       .catch(function () {})
       .then(syncDriveStep);
@@ -461,9 +486,12 @@
        배포 저장소 릴리즈에서 받으면 그 경고가 없다. 숨기면 뒤 단계 번호를 다시 매긴다. */
     function syncDriveStep() {
       var btn = document.getElementById('dl-win');
+      var mac = document.getElementById('dl-mac');
       var step = document.getElementById('step-drive');
       if (!btn || !step) return;
-      var viaDrive = /drive\.(usercontent\.)?google\.com/.test(btn.href);
+      // 맥 버튼이 드라이브면 맥 탭이 이 단계를 가리키므로 남겨 둔다
+      var isDrive = function (el) { return el && /drive\.(usercontent\.)?google\.com/.test(el.href); };
+      var viaDrive = isDrive(btn) || isDrive(mac);
       step.style.display = viaDrive ? '' : 'none';
       var nums = Array.prototype.filter.call(
         document.querySelectorAll('#panel-win .step'),
