@@ -9,6 +9,6 @@
   ],
   "force": false,
   "windows_url": "https://github.com/raion-log/vrewauto-releases/releases/download/v2.1.6/VrewAuto_2.1.6_x64-setup.exe",
-  "mac_url": "",
+  "mac_url": "https://github.com/raion-log/vrewauto-releases/releases/download/v2.1.6/VrewAuto_2.1.6_universal.dmg",
   "published_at": "2026-09-23"
 }
